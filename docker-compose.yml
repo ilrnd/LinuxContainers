@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+
+  db:
+    build:
+      dockerfile: ./Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+    restart: unless-stopped
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - app-network
+    deploy:
+      mode: replicated
+      replicas: 2
+  
+  adminer:
+    image: adminer:4.8.1
+    restart: always
+    ports:
+      - 6080:8080
+    volumes:
+      - ./myfolder:/myfolder
+    networks:
+      - app-network
+    deploy:
+      mode: repicated
+      replicas: 1
+
+volumes:
+    db:
+
+networks:
+   app-network:
+     driver: bridge
+
